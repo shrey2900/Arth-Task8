@@ -1,0 +1,146 @@
+#LOCAL SYSTEM
+
+
+import os  
+while True:
+    print("""
+ \n
+ press 1 : to display the hardisk 
+ press 2 : to creating physical volume
+ press 3 : to create volume group
+ press 4 : to create a logical volume 
+ press 5 : to format the partion 
+ press 6 : to mount the partion 
+ press 7 : to display all mounted partition
+ press 8 : to extend the size of partition and resize the partition
+ press 9 : to continue wth other option
+ """)
+    a=input("enter your choice :")
+    if a=="1":
+        os.system("fdisk -l")
+    elif a=="2":
+        ch = input("enter the name of hard disk :")
+        print()
+        os.system("pvcreate /dev/{}".format(ch))
+        os.system("pvdisplay /dev/{}".format(ch))
+    elif a=="3":
+        ch = input("enter the name of hard disk :")
+        ch1=input("enter the name of volume group :")
+        print()
+        os.system("vgcreate {} /dev/{}".format(ch1,ch))
+        os.system("vgdisplay {}".format(ch1))
+    elif a=="4":
+        ch1=input("enter the name of volume group :")
+        ch2 = input("enter the size of logical volume informat of G and M :")
+        ch3 = input("enter the name of logical volume :")
+        print()
+        os.system("lvcreate --size {} --name {} {}".format(ch2,ch3,ch1))
+        os.system("lvdisplay {}/{}".format(ch1,ch3))
+        print("\tnow the partition is created")
+
+    elif a=="5":
+        ch1=input("enter the name of volume group :")
+        ch3 = input("enter the name of logical volume :")
+        ch4 = input("enter the type of format :")
+        os.system("mkfs.{} /dev/{}/{}".format(ch4,ch1,ch3))
+        print()
+        print("\tnow the partition is formatted") 
+    elif a=="6":
+        ch1=input("enter the name of volume group :")
+        ch3 = input("enter the name of logical volume :")
+        ch5 = input("enter the name of directory/folder which you want to mount :")
+        os.system("mkdir /{}".format(ch5))
+        os.system("mount /dev/{}/{}  /{}".format(ch1,ch3,ch5))
+        print()
+        print("\tnow the partition is mounted")
+    elif a=="7":
+        os.system("df -h")
+    elif a=="8":
+        ch1=input("enter the name of volume group :")
+        ch3 = input("enter the name of logical volume :")
+        ch6=input("emter the size which you want to extend :")
+        os.system("lvextend --size +{} /dev/{}/{}".format(ch6,ch1,ch3))
+        os.system("resize2fs /dev/{}/{}".format(ch1,ch3))
+    elif a=="9":
+        print('\t\nplease enter to contimue')
+        break
+
+
+#REMOTE SYSTEM
+
+
+while True:
+    print("""
+    \n
+    press 1 : To display the hardisk 
+    press 2 : To creating physical volume
+    press 3 : To create volume group
+    press 4 : To create a logical volume 
+    press 5 : To format the partion 
+    press 6 : To mount the partion 
+    press 7 : To display all mounted partition
+    press 8 : To extend the size of partition and resize the partition
+    press 9 : To continue with other option
+    """)
+    a=input("enter your choice :")
+    if a=="1":
+        print('\n\t\t>> Please Wait...')
+        os.system("ssh {} fdisk -l".format(rip))
+    elif a=="2":
+        ch = input("enter the name of hard disk :")
+        print()
+        print('\n\t\t>> Please Wait...')
+        os.system("ssh {} pvcreate /dev/{}".format(rip,ch))
+        os.system("ssh {} pvdisplay /dev/{}".format(rip,ch))
+    elif a=="3":
+        ch = input("enter the name of hard disk :")
+        ch1=input("enter the name of volume group :")
+        print()
+        print('\n\t\t>> Please Wait...')
+        os.system("ssh {} vgcreate {} /dev/{}".format(rip,ch1,ch))
+        os.system("ssh {} vgdisplay {}".format(rip,ch1))
+    elif a=="4":
+        ch1=input("enter the name of volume group :")
+        ch2 = input("enter the size of logical volume informat of G and M :")
+        ch3 = input("enter the name of logical volume :")
+        print()
+        print('\n\t\t>> Please Wait...')
+
+        os.system("ssh {} lvcreate --size {} --name {} {}".format(rip,ch2,ch3,ch1))
+        os.system("ssh {} lvdisplay {}/{}".format(rip,ch1,ch3))
+        print("\tnow the partition is created")
+    elif a=="5":
+        ch1=input("enter the name of volume group :")
+        ch3 = input("enter the name of logical volume :")
+        ch4 = input("enter the type of format :")
+        print('\n\t\t>> Please Wait...')
+
+        os.system("ssh {} mkfs.{} /dev/{}/{}".format(rip,ch4,ch1,ch3))
+        print()
+        print("\tnow the partition is formatted")
+    elif a=="6":
+        ch1=input("enter the name of volume group :")
+        ch3 = input("enter the name of logical volume :")
+        ch5 = input("enter the name of directory/folder which you want to mount :")
+        print('\n\t\t>> Please Wait...')
+
+        os.system("ssh {} mkdir /{}".format(rip,ch5))
+        os.system("ssh {} mount /dev/{}/{}  /{}".format(rip,ch1,ch3,ch5))
+        print()
+        print("\tnow the partition is mounted")
+    elif a=="7":
+        print('\n\t\t>> Please Wait...')
+
+        os.system("ssh {} df -h".format(rip))
+    elif a=="8":
+        ch1=input("enter the name of volume group :")
+        ch3 = input("enter the name of logical volume :")
+        ch6=input("emter the size which you want to extend :")
+        print('\n\t\t>> Please Wait...')
+
+        os.system("ssh {} lvextend --size +{} /dev/{}/{}".format(rip,ch6,ch1,ch3))
+        os.system("ssh {} resize2fs /dev/{}/{}".format(rip,ch1,ch3))
+    elif a=="9":
+ 
+        input('\nPress enter key to continue...')
+        break
